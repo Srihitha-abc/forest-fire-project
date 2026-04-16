@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forest Fire Monitoring System</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts for modern look -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Chart.js for graphs -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <div class="dashboard-app">
+    <!-- Fire Alert Banner -->
+    <div id="fire-alert-banner" class="fire-alert-banner" style="display: none;">
+      <i class="fas fa-fire"></i>
+      <span>FIRE DETECTED! Immediate action required!</span>
+      <button onclick="dismissAlert()" class="dismiss-btn"><i class="fas fa-times"></i></button>
+    </div>
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <i class="fas fa-tree"></i>
+        <span>Forest Fire</span>
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle" onclick="toggleMobileMenu()">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+      <nav class="nav-tabs" id="nav-tabs">
+        <button class="tab-btn active" id="tab-dashboard" onclick="showTab('dashboard')"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
+        <button class="tab-btn" id="tab-live" onclick="showTab('live')"><i class="fas fa-broadcast-tower"></i> Live Data</button>
+        <button class="tab-btn" id="tab-alerts" onclick="showTab('alerts')"><i class="fas fa-exclamation-triangle"></i> Alerts</button>
+        <button class="tab-btn" id="tab-control" onclick="showTab('control')"><i class="fas fa-cogs"></i> Control</button>
+        <button class="tab-btn" id="tab-about" onclick="showTab('about')"><i class="fas fa-info-circle"></i> About</button>
+      </nav>
+    </aside>
+    <div class="main-content">
+      <header class="top-header">
+        <h1><i class="fas fa-fire"></i> Forest Fire Monitoring System</h1>
+        <div class="header-info">
+          <div class="location-display">
+            <i class="fas fa-map-marker-alt"></i> Forest Zone 1
+          </div>
+          <div class="last-updated" id="header-last-updated">
+            Last updated: --
+          </div>
+        </div>
+      </header>
+      <main>
+        <!-- Dashboard Tab -->
+        <section class="tab-page" id="dashboard" style="display:block">
+          <div class="dashboard-cards">
+            <div class="card" id="temperature-card">
+              <div class="icon"><i class="fas fa-temperature-high"></i></div>
+              <div class="label">Temperature</div>
+              <div class="value" id="temperature-value">-- °C</div>
+            </div>
+            <div class="card" id="smoke-card">
+              <div class="icon"><i class="fas fa-smog"></i></div>
+              <div class="label">Smoke Level</div>
+              <div class="value" id="smoke-value">--</div>
+            </div>
+            <div class="card status-card" id="status-card">
+              <div class="icon" id="status-icon"><i class="fas fa-shield-alt"></i></div>
+              <div class="label">Status</div>
+              <div class="status-badge" id="status-badge">
+                <span id="status-emoji">🟢</span>
+                <span id="status-value">--</span>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Live Data Tab -->
+        <section class="tab-page" id="live" style="display:none">
+          <div class="live-section">
+            <h2><i class="fas fa-broadcast-tower"></i> Live Data</h2>
+            <div class="live-values">
+              <div>Temperature: <span id="live-temperature">-- °C</span></div>
+              <div>Smoke Level: <span id="live-smoke">--</span></div>
+              <div>Status: <span id="live-status">--</span></div>
+            </div>
+            <div class="live-meta">
+              <span id="last-updated">Last updated: --</span>
+              <span id="loading" class="loading">Loading data...</span>
+            </div>
+            <div class="graph-container">
+              <canvas id="sensorChart"></canvas>
+            </div>
+            <div class="logging-section">
+              <h3><i class="fas fa-history"></i> Recent Readings</h3>
+              <table id="log-table">
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>Temperature</th>
+                    <th>Smoke</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="log-body">
+                  <!-- Logs will be inserted here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+        <!-- Alerts Tab -->
+        <section class="tab-page" id="alerts" style="display:none">
+          <div id="alert-box" class="alert-box safe">
+            <i class="fas fa-check-circle"></i> No alerts
+          </div>
+          <div class="alert-history">
+            <h3><i class="fas fa-clock"></i> Alert History</h3>
+            <div id="alert-history-list">
+              <!-- Alert history will be shown here -->
+            </div>
+          </div>
+        </section>
+        <!-- Control Tab -->
+        <section class="tab-page" id="control" style="display:none">
+          <div class="control-section">
+            <h2><i class="fas fa-cogs"></i> System Control</h2>
+            <div class="control-buttons">
+              <button class="control-btn simulate-fire" onclick="simulateFire()">
+                <i class="fas fa-fire"></i> Simulate Fire
+              </button>
+              <button class="control-btn reset-system" onclick="resetSystem()">
+                <i class="fas fa-undo"></i> Reset System
+              </button>
+            </div>
+            <div class="control-info">
+              <p><strong>Note:</strong> These buttons update the Firebase database for testing purposes.</p>
+            </div>
+          </div>
+        </section>
+        <!-- About Tab -->
+        <section class="tab-page" id="about" style="display:none">
+          <div class="about-section">
+            <h2><i class="fas fa-info-circle"></i> About</h2>
+            <p>This project is a modern web dashboard for real-time forest fire detection using temperature and smoke sensors connected via ESP8266 WiFi module. Data is sent to Firebase and displayed live here.</p>
+            <ul>
+              <li>🌡 Temperature Sensor</li>
+              <li>💨 Smoke Sensor</li>
+              <li>📡 ESP8266 WiFi Module</li>
+              <li>🔥 Real-time Alerts & Monitoring</li>
+              <li>📊 Live Charts & Logging</li>
+              <li>🎛️ System Control Panel</li>
+            </ul>
+            <p>Ready for hardware integration. See code comments for details.</p>
+          </div>
+        </section>
+      </main>
+      <footer>
+        <small>Ready for ESP8266 sensor integration. <span class="future">(See code comments)</span></small>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Notification Popup -->
+  <div id="notification-popup" class="notification-popup" style="display: none;">
+    <div class="notification-content">
+      <i class="fas fa-bell"></i>
+      <span id="notification-message">Alert!</span>
+    </div>
+  </div>
+
+  <!-- Firebase v8 CDN -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
