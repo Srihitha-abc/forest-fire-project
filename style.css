@@ -1,0 +1,665 @@
+.tab-page {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+.tab-page.active {
+  display: block;
+  opacity: 1;
+  animation: fadeInTab 0.4s;
+}
+@keyframes fadeInTab {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.tab-btn.active {
+  background: #388e3c;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 2px 0 8px #388e3c22 inset;
+}
+
+/* Icon fixes */
+.icon i, .tab-btn i, .sidebar-header i, .about-section h2 i, .graph-title i {
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+/* Green/Red theming for SAFE/FIRE */
+.status-card.safe, .alert-box.safe {
+  background: #e8f5e9;
+  border: 2.5px solid #43a047;
+  color: #256029;
+}
+.status-card.fire, .alert-box.fire {
+  background: #ffebee;
+  border: 2.5px solid #d32f2f;
+  color: #d32f2f;
+  animation: blink 1s steps(2, start) infinite;
+}
+.status-card .icon, .alert-box .icon {
+  color: #388e3c;
+}
+.status-card.fire .icon, .alert-box.fire .icon {
+  color: #d32f2f;
+  animation: shake 0.5s infinite;
+}
+
+/* Ensure icons are visible and not cut off */
+.icon i, .tab-btn i {
+  font-size: 1.3em;
+}
+
+/* Minor improvements for clarity */
+.dashboard-cards {
+  margin-top: 18px;
+}
+/* Forest Fire Monitoring System Dashboard Styles */
+
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', Arial, sans-serif;
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  min-height: 100vh;
+  color: #222;
+}
+
+.dashboard-app {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Fire Alert Banner */
+.fire-alert-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #d32f2f;
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 1000;
+  animation: slideDown 0.5s, blink 1s infinite;
+  box-shadow: 0 2px 10px rgba(211, 47, 47, 0.3);
+}
+
+.fire-alert-banner i {
+  font-size: 1.5rem;
+  margin-right: 10px;
+}
+
+.fire-alert-banner span {
+  flex: 1;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.dismiss-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.dismiss-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+
+/* Sidebar */
+.sidebar {
+  width: 210px;
+  background: #256029;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  box-shadow: 2px 0 16px 0 #25602922;
+  z-index: 2;
+  transition: transform 0.3s;
+}
+
+.sidebar.mobile-open {
+  transform: translateX(0);
+}
+
+.sidebar-header {
+  font-size: 1.3rem;
+  font-weight: 700;
+  padding: 28px 0 18px 0;
+  text-align: center;
+  letter-spacing: 1px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+}
+
+.mobile-menu-toggle {
+  display: none;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background: none;
+  border: none;
+  color: #a5d6a7;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.sidebar-header i {
+  font-size: 2.1rem;
+  color: #a5d6a7;
+}
+.nav-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 18px;
+  transition: transform 0.3s;
+}
+
+.nav-tabs.mobile-open {
+  transform: translateX(0);
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  text-align: left;
+  padding: 14px 32px;
+  font-size: 1.07rem;
+  font-family: inherit;
+  cursor: pointer;
+  outline: none;
+  transition: background 0.18s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tab-btn.active, .tab-btn:hover {
+  background: #388e3c;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin-top: 70px; /* Account for fixed banner */
+}
+
+.top-header {
+  background: #e8f5e9;
+  padding: 22px 32px 12px 32px;
+  border-bottom: 1.5px solid #c8e6c9;
+  box-shadow: 0 2px 8px #388e3c11;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-header h1 {
+  font-size: 1.5rem;
+  color: #256029;
+  margin: 0;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+}
+
+.location-display {
+  font-size: 1rem;
+  color: #256029;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.last-updated {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+main {
+  flex: 1;
+  padding: 32px 32px 0 32px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Tab Pages */
+.tab-page {
+  display: block;
+  animation: fadeIn 0.5s;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Dashboard Cards */
+.dashboard-cards {
+  display: flex;
+  gap: 28px;
+  justify-content: center;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.card {
+  background: #f1f8e9;
+  border-radius: 18px;
+  box-shadow: 0 4px 18px rgba(34, 139, 34, 0.13);
+  padding: 28px 22px 18px 22px;
+  min-width: 130px;
+  min-height: 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: box-shadow 0.2s, background 0.2s, transform 0.2s;
+  position: relative;
+  cursor: pointer;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(34, 139, 34, 0.2);
+}
+.card .icon {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: #388e3c;
+}
+.card .label {
+  font-size: 1.1rem;
+  color: #388e3c;
+  margin-bottom: 7px;
+  font-weight: 600;
+}
+.card .value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #222;
+}
+.status-card {
+  min-width: 150px;
+  background: #e3f2fd;
+  border: 2px solid #90caf9;
+}
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 8px 12px;
+  border-radius: 20px;
+  transition: all 0.3s;
+}
+.status-badge.safe {
+  background: #e8f5e9;
+  color: #256029;
+  border: 2px solid #43a047;
+}
+.status-badge.fire {
+  background: #ffebee;
+  color: #d32f2f;
+  border: 2px solid #d32f2f;
+  animation: pulse 1s infinite;
+}
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Live Data */
+.live-section {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.live-values {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 1.13rem;
+  color: #256029;
+  font-weight: 600;
+}
+.live-meta {
+  display: flex;
+  gap: 18px;
+  font-size: 0.98rem;
+  color: #666;
+  margin-bottom: 2px;
+}
+.graph-container {
+  background: #f1f8e9;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px #388e3c22;
+  padding: 18px;
+  margin: 20px 0;
+}
+.graph-container canvas {
+  max-height: 300px;
+}
+.logging-section {
+  margin-top: 20px;
+}
+.logging-section h3 {
+  color: #256029;
+  margin-bottom: 10px;
+}
+#log-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px #388e3c22;
+}
+#log-table th, #log-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+#log-table th {
+  background: #256029;
+  color: white;
+  font-weight: 600;
+}
+#log-table tr:hover {
+  background: #f9f9f9;
+}
+
+/* Control Section */
+.control-section {
+  max-width: 420px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.control-section h2 {
+  color: #256029;
+  text-align: center;
+}
+.control-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.control-btn {
+  padding: 15px 25px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.control-btn.simulate-fire {
+  background: #d32f2f;
+  color: white;
+}
+.control-btn.simulate-fire:hover {
+  background: #b71c1c;
+  transform: scale(1.05);
+}
+.control-btn.reset-system {
+  background: #388e3c;
+  color: white;
+}
+.control-btn.reset-system:hover {
+  background: #2e7d32;
+  transform: scale(1.05);
+}
+.control-info {
+  text-align: center;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Alerts */
+.alert-box {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 22px 18px;
+  border-radius: 14px;
+  font-size: 1.15rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #e8f5e9;
+  color: #256029;
+  box-shadow: 0 2px 8px #388e3c22;
+  border: 2px solid #43a047;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+.alert-box.fire {
+  background: #ffebee;
+  color: #d32f2f;
+  border: 2.5px solid #d32f2f;
+  animation: blink 1s steps(2, start) infinite;
+}
+.alert-box i {
+  font-size: 1.5rem;
+}
+.alert-history {
+  margin-top: 20px;
+}
+.alert-history h3 {
+  color: #256029;
+}
+#alert-history-list {
+  list-style: none;
+  padding: 0;
+}
+#alert-history-list li {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  color: #666;
+}
+
+/* Notification Popup */
+.notification-popup {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #256029;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: slideUp 0.3s;
+}
+.notification-popup i {
+  font-size: 1.2rem;
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* About */
+.about-section {
+  max-width: 420px;
+  margin: 0 auto;
+  background: #f1f8e9;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px #388e3c22;
+  padding: 22px 18px 18px 18px;
+}
+.about-section h2 {
+  color: #256029;
+  margin-top: 0;
+}
+.about-section ul {
+  margin: 12px 0 0 0;
+  padding-left: 22px;
+}
+.about-section li {
+  margin-bottom: 6px;
+  font-size: 1.07rem;
+}
+
+footer {
+  margin-top: 18px;
+  color: #888;
+  font-size: 0.93rem;
+  text-align: center;
+}
+.future {
+  color: #388e3c;
+  font-weight: 600;
+}
+
+.loading {
+  color: #d32f2f;
+  font-weight: 600;
+  margin-left: 10px;
+  display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .dashboard-app {
+    flex-direction: column;
+  }
+  .sidebar {
+    flex-direction: row;
+    width: 100vw;
+    height: 60px;
+    min-width: unset;
+    max-width: unset;
+    box-shadow: 0 2px 8px #25602922;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 0 0 0;
+    transform: translateX(0);
+  }
+  .sidebar.mobile-open {
+    height: auto;
+    flex-direction: column;
+  }
+  .sidebar-header {
+    flex-direction: row;
+    font-size: 1.1rem;
+    padding: 0 18px;
+    gap: 8px;
+  }
+  .mobile-menu-toggle {
+    display: block;
+  }
+  .nav-tabs {
+    flex-direction: row;
+    gap: 0;
+    margin-top: 0;
+    transform: translateX(-100%);
+  }
+  .nav-tabs.mobile-open {
+    transform: translateX(0);
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background: #256029;
+    z-index: 10;
+  }
+  .tab-btn {
+    padding: 10px 18px;
+    font-size: 1rem;
+  }
+  .main-content {
+    padding-top: 0;
+    margin-top: 70px;
+  }
+  main {
+    padding: 18px 4vw 0 4vw;
+  }
+  .top-header {
+    padding: 15px 4vw;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .header-info {
+    align-items: flex-start;
+  }
+  .fire-alert-banner {
+    padding: 10px 15px;
+  }
+  .control-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  .notification-popup {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+  }
+}
+@media (max-width: 600px) {
+  .dashboard-cards {
+    flex-direction: column;
+    gap: 14px;
+    align-items: stretch;
+  }
+  .card, .status-card {
+    min-width: unset;
+    width: 100%;
+    padding: 18px 0 12px 0;
+  }
+  main {
+    padding: 12px 2vw 0 2vw;
+  }
+  .live-section, .control-section, .alert-box {
+    max-width: 100%;
+  }
+  #log-table {
+    font-size: 0.9rem;
+  }
+  #log-table th, #log-table td {
+    padding: 8px;
+  }
+}
